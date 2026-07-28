@@ -1,0 +1,54 @@
+name: Release PDF
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tex_file:
+        description: Root TeX file to compile
+        required: true
+        default: placeholder.tex
+
+permissions:
+  contents: write
+
+env:
+  TEX_FILE: ${{ inputs.tex_file || 'placeholder.tex' }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Resolve output path
+        id: document
+        shell: bash
+        run: |
+          if [[ "$TEX_FILE" != *.tex || ! -f "$TEX_FILE" ]]; then
+            echo "::error::Set tex_file to an existing root .tex file (currently: $TEX_FILE)"
+            exit 1
+          fi
+          echo "pdf=${TEX_FILE%.tex}.pdf" >> "$GITHUB_OUTPUT"
+
+      - name: Compile PDF
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: ${{ env.TEX_FILE }}
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: pdf
+          path: ${{ steps.document.outputs.pdf }}
+          if-no-files-found: error
+
+      - name: Create GitHub release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v3
+        with:
+          files: ${{ steps.document.outputs.pdf }}
+          fail_on_unmatched_files: true
+          generate_release_notes: true

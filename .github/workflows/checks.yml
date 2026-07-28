@@ -1,0 +1,29 @@
+name: Checks
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Lint GitHub Actions workflows
+        uses: docker://rhysd/actionlint:1.7.12
+        with:
+          args: -color
+
+      - name: Check whitespace
+        run: git diff --check "$(git hash-object -t tree /dev/null)" HEAD
+
+      - name: Lint and check TeX formatting
+        if: hashFiles('**/*.tex') != ''
+        uses: xu-cheng/texlive-action@v3
+        with:
+          run: |
+            mapfile -d '' files < <(find . -type f -name '*.tex' -not -path './.git/*' -print0)
+            chktex -q "${files[@]}"
+            latexindent --check "${files[@]}"
