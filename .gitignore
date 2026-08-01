@@ -11,6 +11,24 @@ dist/
 # Jupyter
 .ipynb_checkpoints/
 
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
 # LaTeX
 *.aux
 *.bbl
@@ -24,3 +42,26 @@ dist/
 *.run.xml
 *.synctex*
 *.toc
+*.nav
+*.snm
+*.vrb
+*.lof
+*.lot
+*.loa
+*.idx
+*.ilg
+*.ind
+*.glo
+*.glg
+*.gls
+*.acn
+*.acr
+*.alg
+*.ist
+*.xdv
+*.dvi
+*.figlist
+*.makefile
+*.pyg
+*.tdo
+_minted*/
