@@ -4,18 +4,33 @@ version = "0.0.0"
 requires-python = ">=3.12"
 dependencies = [
     "matplotlib",
-	"numpy",
+    "numpy",
     "pandas",
+    "rich",
     "scipy",
 ]
 
+[project.scripts]
+clean = "tools.script:clean"
+code = "tools.script:code"
+latex-compile = "tools.script:latex_compile"
+
 [dependency-groups]
 dev = [
-    "click",
     "ipykernel",
-    "rich",
     "ruff",
 ]
 
-[tool.uv]
-package = false
+[build-system]
+requires = ["uv_build>=0.12.0,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "tools"
+module-root = ""
+
+[tool.ruff]
+line-length = 80
+
+[tool.ruff.lint]
+extend-select = ["E501"]
