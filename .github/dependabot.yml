@@ -14,21 +14,7 @@ updates:
     commit-message:
       prefix: "chore(deps)"
 
-  - package-ecosystem: "pip"
-    directory: "/tools/deps"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "06:00"
-      timezone: "Australia/Brisbane"
-    groups:
-      python-minor:
-        patterns: ["*"]
-        update-types: ["minor", "patch"]
-    commit-message:
-      prefix: "chore(deps)"
-
-  - package-ecosystem: "conda"
+  - package-ecosystem: "uv"
     directory: "/"
     schedule:
       interval: "weekly"
@@ -36,7 +22,7 @@ updates:
       time: "06:00"
       timezone: "Australia/Brisbane"
     groups:
-      conda-minor:
+      python-minor:
         patterns: ["*"]
         update-types: ["minor", "patch"]
     commit-message:

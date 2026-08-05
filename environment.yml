@@ -1,8 +1,0 @@
-name: mech2700
-
-dependencies:
-  - python
-  - pip
-  - pip:
-      - -r tools/deps/requirements.txt
-      - -r tools/deps/requirements.dev.txt

@@ -1,0 +1,21 @@
+[project]
+name = "mech2700"
+version = "0.0.0"
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib",
+	"numpy",
+    "pandas",
+    "scipy",
+]
+
+[dependency-groups]
+dev = [
+    "click",
+    "ipykernel",
+    "rich",
+    "ruff",
+]
+
+[tool.uv]
+package = false
