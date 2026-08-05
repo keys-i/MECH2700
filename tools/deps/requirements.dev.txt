@@ -1,4 +1,0 @@
-click
-ipykernel
-rich
-ruff

@@ -1,0 +1,178 @@
+\documentclass[a4paper]{exam}
+\usepackage[svgnames]{xcolor}
+\usepackage{amsmath,amssymb,amsthm,titlesec,minted}
+
+\newcommand
+\lralign[2]{%
+  \noindent\makebox[\textwidth]{\(\displaystyle#1\)\hfill\ifx&#2&\else(#2)\fi}\vspace{2ex}
+}
+
+\renewcommand{\thesubsection}{\alph{subsection}.}
+\renewcommand{\thesubsubsection}{\roman{subsubsection}.}
+
+\definecolor{faintgreen}{rgb}{0.5,1,0.5}
+\definecolor{faintred}{rgb}{1,0.5,0.5}
+\definecolor{faintblue}{rgb}{0.5,0.5,1}
+\definecolor{faintyellow}{rgb}{1,1,0.5}
+\definecolor{codebg}{RGB}{40,42,54}
+
+\titleformat{\section}{\normalfont\Large\bfseries}{}{0pt}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{}{0pt}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\itshape}{}{0pt}{}
+\titlespacing*{\section}{1em}{1.6\baselineskip}{0.6\baselineskip}
+\titlespacing*{\subsection}{2em}{1.2\baselineskip}{0.4\baselineskip}
+\titlespacing*{\subsubsection}{4em}{1.0\baselineskip}{0.3\baselineskip}
+
+\setminted{style=dracula,bgcolor=codebg,breaklines,autogobble,fontsize=\small,tabsize=4,baselinestretch=1}
+\NewDocumentCommand{\codefromfile}{O{}mm}{\par\vspace{0.4em}\inputminted[#1]{#2}{#3}\par\vspace{0.4em}}
+\NewDocumentEnvironment{Section}{m}
+{%
+  \section*{#1}%
+  \begingroup
+  \leftskip=1em
+}
+{%
+  \par
+  \endgroup
+}
+
+\NewDocumentEnvironment{Subsection}{m}
+{%
+  \subsection*{#1}%
+  \begingroup
+  \leftskip=2em
+}
+{%
+  \par
+  \endgroup
+}
+
+\setlength{\parindent}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.8in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{18pt}
+
+\printanswers
+\title{Week 2}
+\author{Radhesh Goel}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Question 1.}
+\begin{solution}
+  \begin{Section}{a.}
+    The correlation is
+    \[
+      k(T) = AT^B e^{CT}e^{D / T},
+    \]
+    where
+    \[
+      A = 1.5531,\qquad B = 0.8703,\qquad C = -12.4882 \times 10^{-4},\qquad D = 143.6
+    \]
+    At \(T = 100K\),
+    \[
+      \begin{aligned}
+        k(100) & = 1.5531(100)^{0.8703} e^{( - 12.4882 \times 10^{-4})(100)} e^{143.6 / 100} \\
+               & = 317.11058019\ \mathrm{W/(mK)}
+      \end{aligned}
+    \]
+    Similarly,
+    \[
+      \boxed{
+            \begin{aligned}
+                k(100)&=317.11058019\ \mathrm{W/(mK)} \\
+                k(200)&=249.53883084\ \mathrm{W/(mK)} \\
+                k(300)&=246.72527927\ \mathrm{W/(mK)}
+            \end{aligned}}
+    \]
+  \end{Section}
+
+  \begin{Section}{b.}
+    The polynomial has the form
+    \[
+      k(T) = a T^2 + b T + c
+    \]
+    Substituting the three known points gives
+    \[
+      \begin{aligned}
+        10000a + 100b + c & = 317.11058019 \\
+        40000a + 200b + c & = 249.53883084 \\
+        90000a + 300b + c & = 246.72527927
+      \end{aligned}
+    \]
+    Subtracting the first equation from the second,
+    \[
+      30000a + 100b = -67.57174935
+    \]
+    Subtracting the second equation from the third,
+    \[
+      50000a + 100b = -2.81355157
+    \]
+    Subtracting these equations,
+    \[
+      20000a = 64.75819778
+    \]
+    so
+    \[
+      a = 0.003237909889
+    \]
+    Substituting this into the first reduced equation,
+    \[
+      30000(0.003237909889) + 100b = -67.57174935
+    \]
+    which gives
+    \[
+      b = -1.647090460
+    \]
+    Finally, using the first original equation,
+    \[
+      10000a + 100b + c = 317.11058019
+    \]
+    giving
+    \[
+      c = 449.4405273
+    \]
+    Therefore,
+    \[
+      k_{\mathrm{interp}}(T) = 0.003237909889 T^2 - 1.647090460 T + 449.4405273
+    \]
+  \end{Section}
+
+  \begin{Section}{c.}
+    \[
+      \begin{aligned}
+        k_{\mathrm{interp}}(250) & = 0.003237909889(250)^2 - 1.647090460(250) + 449.4405273 \\
+                                 & = 240.03728033\ \mathrm{W/(mK)}
+      \end{aligned}
+    \]
+    Thus,
+    \[
+      \boxed{k_{\mathrm{interp}}(250)=240.0373\ \mathrm{W/(mK)}}
+    \]
+  \end{Section}
+
+  \begin{Section}{d.}
+    The exact value from the original correlation is
+    \[
+      k_{\mathrm{exact}} = 246.60191848 \mathrm{W/(mK)}
+    \]
+    Therefore,
+    \[
+      \begin{aligned}
+        \mathrm{error} & = \left| \frac{k_{\mathrm{interp}}-k_{\mathrm{exact}}} {k_{\mathrm{exact}}} \right| \times 100 \\
+                       & = \left| \frac{240.03728033-246.60191848} {246.60191848} \right| \times 100 \\
+                       & = 2.6620 \%
+      \end{aligned}
+    \]
+    Thus,
+    \[
+      \boxed{\mathrm{Percentage\ error}\approx2.66\%}
+    \]
+  \end{Section}
+\end{solution}
+
+\end{document}
