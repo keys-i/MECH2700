@@ -2,38 +2,82 @@ name: Checks
 
 on:
   push:
-    paths-ignore:
-      - README.md
+    paths:
+      - "**/*.py"
+      - "**/*.tex"
   pull_request:
-    paths-ignore:
-      - README.md
+    paths:
+      - "**/*.py"
+      - "**/*.tex"
 
 permissions:
   contents: read
 
+concurrency:
+  group: checks-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  checks:
+  changes:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      python: ${{ steps.filter.outputs.python }}
+      tex: ${{ steps.filter.outputs.tex }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            python:
+              - '**/*.py'
+            tex:
+              - '**/*.tex'
+
+  python:
+    needs: changes
+    if: needs.changes.outputs.python == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
 
       - name: Set up uv
-        if: hashFiles('**/*.py', '**/*.tex') != ''
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
           version-file: pyproject.toml
 
-      - name: Lint and check Python formatting
-        if: hashFiles('**/*.py') != ''
-        run: |
-          mapfile -d '' files < <(find . -type f -name '*.py' -not -path './.git/*' -print0)
-          uvx --from ruff==0.16.0 ruff check --output-format=github "${files[@]}"
-          uvx --from ruff==0.16.0 ruff format --check --output-format=github "${files[@]}"
+      - name: Ruff check
+        run: uvx --from ruff==0.16.0 ruff check --output-format=github
 
-      - name: Lint and check LaTeX formatting
-        if: hashFiles('**/*.tex') != ''
+      - name: Ruff format
+        run: uvx --from ruff==0.16.0 ruff format --check --output-format=github
+
+  tex:
+    needs: changes
+    if: needs.changes.outputs.tex == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          version-file: pyproject.toml
+
+      - name: Badness lint and format
+        shell: bash
         run: |
-          mapfile -d '' files < <(find . -type f -name '*.tex' -not -path './.git/*' -print0)
+          mapfile -t files < <(find . -type f -name '*.tex' ! -path './.git/*' ! -path './.venv/*' | sed 's|^\./||' | sort)
+          if ((${#files[@]} == 0)); then
+            echo "::error::No .tex files found"
+            exit 1
+          fi
+          printf 'Linting:\n'
+          printf '  %s\n' "${files[@]}"
           uvx --from badness==0.10.0 badness lint "${files[@]}"
           uvx --from badness==0.10.0 badness format --check "${files[@]}"

@@ -2,53 +2,86 @@ name: Release PDF
 
 on:
   push:
-    tags:
-      - "v*"
+    paths:
+      - "**/*.tex"
+      - "**/week_*.py"
+  pull_request:
+    paths:
+      - "**/*.tex"
+      - "**/week_*.py"
   workflow_dispatch:
-    inputs:
-      tex_file:
-        description: Root TeX file to compile
-        required: true
-        default: placeholder.tex
 
 permissions:
-  contents: write
+  contents: read
 
-env:
-  TEX_FILE: ${{ inputs.tex_file || 'placeholder.tex' }}
+concurrency:
+  group: release-pdf-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  release:
+  pdfs:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
 
-      - name: Resolve output path
-        id: document
+      - name: Discover week TeX files
+        id: tex
         shell: bash
         run: |
-          if [[ "$TEX_FILE" != *.tex || ! -f "$TEX_FILE" ]]; then
-            echo "::error::Set tex_file to an existing root .tex file (currently: $TEX_FILE)"
+          mapfile -t files < <(find . -type f -name 'week_*.tex' ! -path './.git/*' | sed 's|^\./||' | sort)
+          if ((${#files[@]} == 0)); then
+            echo "::error::No week_*.tex files found"
             exit 1
           fi
-          echo "pdf=${TEX_FILE%.tex}.pdf" >> "$GITHUB_OUTPUT"
+          {
+            echo "root_file<<EOF"
+            printf '%s\n' "${files[@]}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          printf 'Found:\n'
+          printf '  %s\n' "${files[@]}"
 
-      - name: Compile PDF
+      - name: Compile PDFs
         uses: xu-cheng/latex-action@v4
         with:
-          root_file: ${{ env.TEX_FILE }}
+          root_file: ${{ steps.tex.outputs.root_file }}
+          work_in_root_file_dir: true
+          latexmk_shell_escape: true
+          extra_system_packages: py3-pygments
 
-      - name: Upload PDF artifact
+      - name: Package folder zips
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          declare -A weeks=()
+          while IFS= read -r pdf; do
+            dir=$(dirname "$pdf")
+            base=$(basename "$pdf" .pdf)
+            [[ "$base" =~ ^week_0*([0-9]+)$ ]] || continue
+            num=${BASH_REMATCH[1]}
+            mkdir -p "dist/.staging/${dir}"
+            cp "$pdf" "dist/.staging/${dir}/W${num}.pdf"
+            weeks["$dir"]=1
+          done < <(find . -type f -name 'week_*.pdf' ! -path './.git/*' ! -path './dist/*' | sed 's|^\./||' | sort)
+
+          if ((${#weeks[@]} == 0)); then
+            echo "::error::No week_*.pdf outputs to package"
+            exit 1
+          fi
+
+          for dir in "${!weeks[@]}"; do
+            zip_name="$(basename "$dir").zip"
+            (cd "dist/.staging/${dir}" && zip -X -q "../../${zip_name}" W*.pdf)
+            echo "packed dist/${zip_name}:"
+            unzip -l "dist/${zip_name}"
+          done
+          rm -rf dist/.staging
+
+      - name: Upload zips
         uses: actions/upload-artifact@v7
         with:
-          name: pdf
-          path: ${{ steps.document.outputs.pdf }}
+          name: pdfs
+          path: dist/*.zip
           if-no-files-found: error
-
-      - name: Create GitHub release
-        if: github.ref_type == 'tag'
-        uses: softprops/action-gh-release@v3
-        with:
-          files: ${{ steps.document.outputs.pdf }}
-          fail_on_unmatched_files: true
-          generate_release_notes: true
