@@ -1,6 +1,8 @@
 """
 A correlation for the thermal conductivity k of Titanium (in W/m/K) as a
 function of temperature
+
+This code is incompatible with gradescope because of tex
 """
 
 from math import exp
