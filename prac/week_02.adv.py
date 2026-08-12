@@ -10,7 +10,7 @@ from math import exp
 import matplotlib.pyplot as plt
 import numpy as np
 
-plt.rcParams.update({"text.usetex": True, "font.family": "Helvetica"})
+plt.rcParams.update({"font.family": "Helvetica"})
 
 # -- variables --
 A = 1.5531
@@ -41,8 +41,8 @@ def plot_thermal_conductivity():
     k_interp = [interpolate(Ts, ks, T) for T in Tsf]
     plt.plot(Tsf, k_interp, label="interpolated")
     plt.plot(Ts, ks, "o", label="data")
-    plt.xlabel("Temperature ($K$)")
-    plt.ylabel(r"Thermal Conductivity ($\frac{W}{mK}$)")
+    plt.xlabel("Temperature (K)")
+    plt.ylabel("Thermal Conductivity (W/mK)")
     plt.title("Thermal Conductivity of Titanium")
     plt.legend()
     plt.show()
