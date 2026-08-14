@@ -1,0 +1,140 @@
+\documentclass[a4paper]{exam}
+\usepackage[svgnames]{xcolor}
+\usepackage{amsmath,amssymb,amsthm,titlesec,minted}
+
+\newcommand
+\lralign[2]{%
+  \noindent\makebox[\textwidth]{\(\displaystyle#1\)\hfill\ifx&#2&\else(#2)\fi}\vspace{2ex}
+}
+
+\renewcommand{\thesubsection}{\alph{subsection}.}
+\renewcommand{\thesubsubsection}{\roman{subsubsection}.}
+
+\definecolor{faintgreen}{rgb}{0.5,1,0.5}
+\definecolor{faintred}{rgb}{1,0.5,0.5}
+\definecolor{faintblue}{rgb}{0.5,0.5,1}
+\definecolor{faintyellow}{rgb}{1,1,0.5}
+\definecolor{codebg}{RGB}{40,42,54}
+
+\titleformat{\section}{\normalfont\Large\bfseries}{}{0pt}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{}{0pt}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\itshape}{}{0pt}{}
+\titlespacing*{\section}{1em}{1.6\baselineskip}{0.6\baselineskip}
+\titlespacing*{\subsection}{2em}{1.2\baselineskip}{0.4\baselineskip}
+\titlespacing*{\subsubsection}{4em}{1.0\baselineskip}{0.3\baselineskip}
+
+\setminted{style=dracula,bgcolor=codebg,breaklines,autogobble,fontsize=\small,tabsize=4,baselinestretch=1}
+\NewDocumentCommand{\codefromfile}{O{}mm}{\par\vspace{0.4em}\inputminted[#1]{#2}{#3}\par\vspace{0.4em}}
+\NewDocumentEnvironment{Section}{m}
+{%
+  \section*{#1}%
+  \begingroup
+  \leftskip=1em
+}
+{%
+  \par
+  \endgroup
+}
+
+\NewDocumentEnvironment{Subsection}{m}
+{%
+  \subsection*{#1}%
+  \begingroup
+  \leftskip=2em
+}
+{%
+  \par
+  \endgroup
+}
+
+\setlength{\parindent}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.8in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{18pt}
+
+\printanswers
+\title{Week 4}
+\author{Radhesh Goel}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Question 1.}
+\begin{solution}
+  The delivery time $x$ is normally distributed with
+  $\mu = 0.75\text{ h}, \qquad \sigma = 0.5\text{ h}$
+
+  The required probability is
+  \[
+    p = \frac{1}{\sqrt{2\pi\sigma^2}} \int_{0.5}^{1.0} \exp\left[ -\frac{(x-\mu)^2}{2\sigma^2} \right]dx
+  \]
+
+  Substituting $\mu = 0.75$ and $\sigma = 0.5$,
+  \[
+    p = \frac{1}{\sqrt{2\pi(0.5)^2}} \int_{0.5}^{1.0} \exp\left[ -\frac{(x-0.75)^2}{2(0.5)^2} \right]dx
+  \]
+
+  \subsection*{Two-point Gaussian quadrature} For two-point Gauss–Legendre
+  quadrature, the points and weights on $[ - 1,1]$ are
+  \[
+    \xi_1=-\frac{1}{\sqrt{3}}, \qquad \xi_2=\frac{1}{\sqrt{3}}
+  \]
+  \[
+    w_1=w_2=1
+  \]
+
+  Transform from $[ - 1,1]$ to $[0.5,1.0]$:
+  \[
+    x = \frac{a+b}{2} + \frac{b-a}{2}\xi
+  \]
+
+  Here,
+  \[
+    \frac{a+b}{2} = 0.75, \qquad \frac{b-a}{2} = 0.25.
+  \]
+  Therefore, the quadrature points are
+  \[
+    x_1=0.75-\frac{0.25}{\sqrt{3}} = 0.6056624,
+  \]
+  \[
+    x_2=0.75+\frac{0.25}{\sqrt{3}} = 0.8943376.
+  \]
+  Define
+  \[
+    f(x) = \frac{1}{\sqrt{2\pi(0.5)^2}} \exp\left[ -\frac{(x-0.75)^2}{2(0.5)^2} \right].
+  \]
+  At both quadrature points,
+  \[
+    f(x_1)=f(x_2) \approx 0.76532246.
+  \]
+  The two-point Gaussian quadrature estimate is
+  \[
+    p \approx \frac{b-a}{2} \left[ f(x_1)+f(x_2) \right].
+  \]
+  Thus,
+  \[
+    p \approx 0.25(0.76532246 + 0.76532246)
+  \]
+  \[
+    \boxed{p_{\text{GQ}}\approx0.38266123}.
+  \]
+  The true value is
+  \[
+    p_{\text{true}} = 0.3829249225480263.
+  \]
+  Therefore, the absolute error is
+  \[
+    \left| p_{\text{true}} - p_{\text{GQ}} \right| = |0.3829249225 - 0.3826612294|
+  \]
+  \[
+    \boxed{\text{Absolute error}\approx2.6369\times10^{-4}}.
+  \]
+  The percentage relative error is
+  \[
+    \frac{2.6369\times10^{-4}}{0.3829249225} \times 100 \approx 0.0689\%.
+  \]
+\end{solution}
+\end{document}
