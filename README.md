@@ -24,7 +24,6 @@ That creates `.venv` and installs project dependencies (Python ≥ 3.12).
 | ------ | -------- |
 | `prac/` | Practical scripts and write-ups (`week_01.py`, `week_01.tex`, …) |
 | `lec/` | Lecture code (`week_01.py`, …) |
-| `tuts/` | Tutorials (`W<number>/`) |
 | `assign/` | Assignments |
 
 ## Run codes
