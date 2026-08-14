@@ -26,6 +26,7 @@ def gaussian_quadrature_3pt(x0, x1):
     # 3-point Gaussian quadrature
     return (x1 - x0) / 2 * np.sum(W * prob_density)
 
+
 p = gaussian_quadrature_3pt(0.5, 1.0)
 
 print(f"3-point Gaussian quadrature estimate: {p:.10f}")
