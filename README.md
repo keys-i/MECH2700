@@ -46,7 +46,9 @@ uv run python lec/week_01.py
 
 ```bash
 uv run clean                 # remove gitignored build artefacts (keeps .venv)
+uv run fmt                   # format Python and TeX files
 uv run latex-compile path.tex  # compile with MacTeX, strip aux files
+uv run lint                  # lint Python and TeX files
 ```
 That creates `.venv` and installs project dependencies (Python ≥ 3.12).
 

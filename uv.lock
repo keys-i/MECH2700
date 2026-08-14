@@ -29,6 +29,22 @@ wheels = [
 ]
 
 [[package]]
+name = "badness"
+version = "0.10.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f4/ac/cd1de2a92a660552cdc32f897e6b1d02d759651871a34a61e645bf075dad/badness-0.10.0.tar.gz", hash = "sha256:21c88acd38e3122a58777062837417652bf346b5e0e039beea64156b17e807b8", size = 1495792, upload-time = "2026-07-16T08:33:54.137Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/69/ac/ada2483a8c066aed001a703b587b14bdc64dfdc6b0a5e02aa343ca80c148/badness-0.10.0-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:9c491e14c49b9380034c8b7a2611fe2faae45e19dba4af83bd2f3d4e15d6b118", size = 3047460, upload-time = "2026-07-16T08:33:41.519Z" },
+    { url = "https://files.pythonhosted.org/packages/cd/36/c3433bc3e1b4ca9b2200f6ba921b596ffd5c9f49da16456063eb32638a6b/badness-0.10.0-py3-none-macosx_11_0_arm64.whl", hash = "sha256:84d3b18ff66a6b379e70e0b4bb8e50300a0e94d6fc42cc3e635598ea9865d337", size = 2930386, upload-time = "2026-07-16T08:33:43.274Z" },
+    { url = "https://files.pythonhosted.org/packages/41/1b/9215a9035e3d962486886a24951df56d24b54f853af28c143da5983cd246/badness-0.10.0-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:882afbe8a124fda431f9c72511c1d7c5328339529bb27b5989d4cab84d2820fa", size = 3090052, upload-time = "2026-07-16T08:33:45.352Z" },
+    { url = "https://files.pythonhosted.org/packages/22/dc/4bf82b99108df74c500df5864b19dd25845d8ed6ef4469448816ec676e8a/badness-0.10.0-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:96efa3e235d35dd36204163fe29f9a6afe4ca3e9fa8c109d2f5cdea222c6226e", size = 3206189, upload-time = "2026-07-16T08:33:46.791Z" },
+    { url = "https://files.pythonhosted.org/packages/bc/ba/266b60b85c609a774b616ef519541b9f7691e07dfcf20ed3503d5d4e8aef/badness-0.10.0-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:098c59c42274680d1932c4e79bf8c50e1640ef982e272f8958ba38ec1f1d27ed", size = 2958359, upload-time = "2026-07-16T08:33:48.202Z" },
+    { url = "https://files.pythonhosted.org/packages/b4/50/3ad0226e704e585d3891ba65e1aca7fd91c0061e2feb4b394aef637d4cfc/badness-0.10.0-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:51eaca29d4727963a9517b6c8b9e8ca6c28c5d23e8cf672102d3f2b9e285fe59", size = 3336345, upload-time = "2026-07-16T08:33:49.582Z" },
+    { url = "https://files.pythonhosted.org/packages/15/9e/64499fddc5efe9bd925d7049cac0ee559f2b96528dd3ccf42e370e974d56/badness-0.10.0-py3-none-win_amd64.whl", hash = "sha256:dcfa7094a9113d56f408f2a599c415119d332427802275e3b9e191488c980fcb", size = 3069596, upload-time = "2026-07-16T08:33:51.155Z" },
+    { url = "https://files.pythonhosted.org/packages/ef/1a/a7e41a84700b99e10240bc223ebab659c68445f07ec5aa7354ef024fce74/badness-0.10.0-py3-none-win_arm64.whl", hash = "sha256:1e113d1149ed83218c8c57a8b9a6ae5d7e684eece984c6939891c80fdc2ec37d", size = 2915486, upload-time = "2026-07-16T08:33:52.537Z" },
+]
+
+[[package]]
 name = "cffi"
 version = "2.1.1"
 source = { registry = "https://pypi.org/simple" }
@@ -563,6 +579,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "badness" },
     { name = "ipykernel" },
     { name = "ruff" },
 ]
@@ -578,6 +595,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "badness", specifier = "==0.10.0" },
     { name = "ipykernel" },
     { name = "ruff" },
 ]
