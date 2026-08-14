@@ -1,15 +1,15 @@
 name: Release PDF
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "**/*.tex"
-      - "**/week_*.py"
+  schedule:
+    - cron: "0 13 * * 4"
+      timezone: "Australia/Brisbane"
   pull_request:
     paths:
+      - ".github/workflows/release.yml"
       - "**/*.tex"
       - "**/week_*.py"
+      - "tools/scripts/release.sh"
   workflow_dispatch:
 
 permissions:
@@ -29,19 +29,7 @@ jobs:
       - name: Discover week TeX files
         id: tex
         shell: bash
-        run: |
-          mapfile -t files < <(find . -type f -name 'week_*.tex' ! -path './.git/*' | sed 's|^\./||' | sort)
-          if ((${#files[@]} == 0)); then
-            echo "::error::No week_*.tex files found"
-            exit 1
-          fi
-          {
-            echo "root_file<<EOF"
-            printf '%s\n' "${files[@]}"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-          printf 'Found:\n'
-          printf '  %s\n' "${files[@]}"
+        run: tools/scripts/release.sh discover
 
       - name: Compile PDFs
         uses: xu-cheng/latex-action@v4
@@ -52,33 +40,9 @@ jobs:
           extra_system_packages: py3-pygments
 
       - name: Package folder zips
+        id: package
         shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p dist
-          declare -A weeks=()
-          while IFS= read -r pdf; do
-            dir=$(dirname "$pdf")
-            base=$(basename "$pdf" .pdf)
-            [[ "$base" =~ ^week_0*([0-9]+)$ ]] || continue
-            num=${BASH_REMATCH[1]}
-            mkdir -p "dist/.staging/${dir}"
-            cp "$pdf" "dist/.staging/${dir}/W${num}.pdf"
-            weeks["$dir"]=1
-          done < <(find . -type f -name 'week_*.pdf' ! -path './.git/*' ! -path './dist/*' | sed 's|^\./||' | sort)
-
-          if ((${#weeks[@]} == 0)); then
-            echo "::error::No week_*.pdf outputs to package"
-            exit 1
-          fi
-
-          for dir in "${!weeks[@]}"; do
-            zip_name="$(basename "$dir").zip"
-            (cd "dist/.staging/${dir}" && zip -X -q "../../${zip_name}" W*.pdf)
-            echo "packed dist/${zip_name}:"
-            unzip -l "dist/${zip_name}"
-          done
-          rm -rf dist/.staging
+        run: tools/scripts/release.sh package
 
       - name: Upload zips
         uses: actions/upload-artifact@v7
@@ -88,13 +52,14 @@ jobs:
           if-no-files-found: error
 
       - name: Publish GitHub release
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         uses: softprops/action-gh-release@v3
         with:
-          tag_name: pdfs
-          name: Weekly exercise PDFs
+          tag_name: week-${{ steps.package.outputs.week }}
+          target_commitish: ${{ github.sha }}
+          name: Week ${{ steps.package.outputs.week }}
           body: |
-            Auto-built from `${{ github.sha }}` on `${{ github.ref_name }}`.
+            Coursework PDFs through Week ${{ steps.package.outputs.week }}, built from `${{ github.sha }}` on `${{ github.ref_name }}`.
 
             Zips are named by folder (`prac.zip`, …) with `W1.pdf`, `W2.pdf`, …
           files: dist/*.zip
