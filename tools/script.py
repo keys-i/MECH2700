@@ -31,6 +31,20 @@ clean = lambda: call(
 )
 
 
+def fmt() -> int:
+    args = sys.argv[1:]
+    python = call(["ruff", "format", *args, "."])
+    tex = call(["badness", "format", *args, "."])
+    return python or tex
+
+
+def lint() -> int:
+    args = sys.argv[1:]
+    python = call(["ruff", "check", *args, "."])
+    tex = call(["badness", "lint", *args, "."])
+    return python or tex
+
+
 def _menu(title: str, options: list[str]) -> int:
     def render(idx: int) -> None:
         console.print(f"[bold cyan]{title}[/]")

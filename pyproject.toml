@@ -13,10 +13,13 @@ dependencies = [
 [project.scripts]
 clean = "tools.script:clean"
 code = "tools.script:code"
+fmt = "tools.script:fmt"
+lint = "tools.script:lint"
 latex-compile = "tools.script:latex_compile"
 
 [dependency-groups]
 dev = [
+    "badness==0.10.0",
     "ipykernel",
     "ruff",
 ]
