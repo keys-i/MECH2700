@@ -19,7 +19,7 @@ latex-compile = "tools.script:latex_compile"
 
 [dependency-groups]
 dev = [
-    "badness==0.10.0",
+    "badness==0.15.0",
     "ipykernel",
     "ruff",
 ]
