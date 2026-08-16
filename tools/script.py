@@ -48,12 +48,21 @@ def lint() -> int:
 typecheck = lambda: call(["basedpyright", *sys.argv[1:]])
 
 
-def _menu(title: str, options: list[str]) -> int:
+def _menu(
+    title: str, options: list[str], variants: set[int] | None = None
+) -> tuple[int, bool]:
     def render(idx: int) -> None:
         console.print(f"[bold cyan]{title}[/]")
         for i, option in enumerate(options):
             if i == idx:
-                console.print(f"  [bold green]❯ {option}[/]")
+                mode = (
+                    " [dim]<[/] "
+                    f"[yellow]{'Advanced' if advanced else 'Normal'}[/]"
+                    " [dim]>[/]"
+                    if variants and i in variants
+                    else ""
+                )
+                console.print(f"  [bold green]❯ {option}[/]{mode}")
             else:
                 console.print(f"    [dim]{option}[/]")
 
@@ -68,10 +77,10 @@ def _menu(title: str, options: list[str]) -> int:
         while True:
             raw = console.input("[cyan]Select:[/] ").strip()
             if raw.isdigit() and 1 <= int(raw) <= len(options):
-                return int(raw) - 1
+                return int(raw) - 1, False
             console.print("[red]invalid[/]")
 
-    idx, fd = 0, sys.stdin.fileno()
+    idx, advanced, fd = 0, False, sys.stdin.fileno()
     old = termios.tcgetattr(fd)
     sys.stdout.write("\033[?25l")
     sys.stdout.flush()
@@ -83,14 +92,24 @@ def _menu(title: str, options: list[str]) -> int:
             ch = sys.stdin.read(1)
             if ch in "\r\n":
                 wipe()
-                console.print(f"[cyan]{title}[/] [green]{options[idx]}[/]")
-                return idx
+                advanced = bool(advanced and variants and idx in variants)
+                mode = (
+                    f" ({'Advanced' if advanced else 'Normal'})"
+                    if variants is not None
+                    else ""
+                )
+                console.print(
+                    f"[cyan]{title}[/] [green]{options[idx]}{mode}[/]"
+                )
+                return idx, advanced
             if ch == "\x1b":
                 seq = sys.stdin.read(2)
                 if seq == "[A":
                     idx = (idx - 1) % len(options)
                 elif seq == "[B":
                     idx = (idx + 1) % len(options)
+                elif seq in ("[C", "[D") and variants and idx in variants:
+                    advanced = seq == "[C"
                 else:
                     continue
                 wipe()
@@ -116,13 +135,19 @@ def _weeks(folder: Path) -> dict[str, Path]:
 
 
 def code() -> int:
-    kind = list(KINDS)[_menu("Type", list(KINDS))]
+    kind = list(KINDS)[_menu("Type", list(KINDS))[0]]
     weeks = _weeks(KINDS[kind])
     if not weeks:
         console.print(f"[red]no week_XX.py in {KINDS[kind]}[/]")
         return 1
-    week = list(weeks)[_menu("Week", list(weeks))]
-    script = weeks[week]
+    scripts = list(weeks.values())
+    variants = {
+        i
+        for i, script in enumerate(scripts)
+        if script.with_suffix(".adv.py").is_file()
+    }
+    week, advanced = _menu("Week", list(weeks), variants)
+    script = scripts[week].with_suffix(".adv.py") if advanced else scripts[week]
     console.print(f"[dim]running[/] [bold]{script.relative_to(ROOT)}[/]")
     return call([sys.executable, str(script)], cwd=ROOT)
 
