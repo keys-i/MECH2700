@@ -45,6 +45,9 @@ def lint() -> int:
     return python or tex
 
 
+typecheck = lambda: call(["basedpyright", *sys.argv[1:]])
+
+
 def _menu(title: str, options: list[str]) -> int:
     def render(idx: int) -> None:
         console.print(f"[bold cyan]{title}[/]")
