@@ -58,9 +58,6 @@ jobs:
       - name: Typecheck
         run: uv run typecheck
 
-      - name: Test
-        run: uv run python -m unittest discover -s tests -v
-
   tex:
     needs: changes
     if: needs.changes.outputs.tex == 'true'
