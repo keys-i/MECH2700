@@ -18,7 +18,7 @@ def my_det(A):
 
     if n == 3:
         if len(A[0]) != 3 or len(A[1]) != 3 or len(A[2]) != 3:
-            raise ValueError("A must be a non-empty square matrix.")
+            raise ValueError("A must be a non-empty square matrix")
 
         a, b, c = A[0]
         d, e, f = A[1]
@@ -27,7 +27,7 @@ def my_det(A):
 
     if n == 2:
         if len(A[0]) != 2 or len(A[1]) != 2:
-            raise ValueError("A must be a non-empty square matrix.")
+            raise ValueError("A must be a non-empty square matrix")
 
         a, b = A[0]
         c, d = A[1]
@@ -35,11 +35,11 @@ def my_det(A):
 
     if n == 1:
         if len(A[0]) != 1:
-            raise ValueError("A must be a non-empty square matrix.")
+            raise ValueError("A must be a non-empty square matrix")
         return A[0][0]
 
     if n == 0 or any(len(row) != n for row in A):
-        raise ValueError("A must be a non-empty square matrix.")
+        raise ValueError("A must be a non-empty square matrix")
 
     matrix = [list(map(float, row)) for row in A]
     determinant = 1.0
@@ -83,11 +83,11 @@ def determine_coefficients(A, b):
     n = len(A)
 
     if len(b) != n:
-        raise ValueError("b must have the same number of entries as A.")
+        raise ValueError("b must have the same number of entries as A")
 
     if n == 3:
         if len(A[0]) != 3 or len(A[1]) != 3 or len(A[2]) != 3:
-            raise ValueError("A must be a non-empty square matrix.")
+            raise ValueError("A must be a non-empty square matrix")
 
         a, c, d = A[0]
         e, f, g = A[1]
@@ -100,7 +100,7 @@ def determine_coefficients(A, b):
         determinant = a * fj_gi - c * ej_gh + d * ei_fh
 
         if determinant == 0:
-            raise ValueError("A is singular and has no unique solution.")
+            raise ValueError("A is singular and has no unique solution")
 
         qj_gr = q * j - g * r
         qi_fr = q * i - f * r
@@ -114,14 +114,14 @@ def determine_coefficients(A, b):
 
     if n == 2:
         if len(A[0]) != 2 or len(A[1]) != 2:
-            raise ValueError("A must be a non-empty square matrix.")
+            raise ValueError("A must be a non-empty square matrix")
 
         a, c = A[0]
         d, e = A[1]
         determinant = a * e - c * d
 
         if determinant == 0:
-            raise ValueError("A is singular and has no unique solution.")
+            raise ValueError("A is singular and has no unique solution")
 
         p, q = b
         return [
@@ -131,15 +131,15 @@ def determine_coefficients(A, b):
 
     if n == 1:
         if len(A[0]) != 1:
-            raise ValueError("A must be a non-empty square matrix.")
+            raise ValueError("A must be a non-empty square matrix")
 
         pivot = A[0][0]
         if pivot == 0:
-            raise ValueError("A is singular and has no unique solution.")
+            raise ValueError("A is singular and has no unique solution")
         return [b[0] / pivot]
 
     if n == 0 or any(len(row) != n for row in A):
-        raise ValueError("A must be a non-empty square matrix.")
+        raise ValueError("A must be a non-empty square matrix")
 
     matrix = [list(map(float, A[row])) + [float(b[row])] for row in range(n)]
 
@@ -154,7 +154,7 @@ def determine_coefficients(A, b):
                 pivot_size = candidate
 
         if pivot_size == 0.0:
-            raise ValueError("A is singular and has no unique solution.")
+            raise ValueError("A is singular and has no unique solution")
 
         if pivot_row != column:
             matrix[column], matrix[pivot_row] = (
