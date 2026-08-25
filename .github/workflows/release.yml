@@ -9,6 +9,7 @@ on:
       - ".github/workflows/release.yml"
       - "**/*.tex"
       - "**/week_*.py"
+      - "tools/script.py"
       - "tools/scripts/release.sh"
   workflow_dispatch:
 
@@ -26,18 +27,20 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Discover week TeX files
-        id: tex
-        shell: bash
-        run: tools/scripts/release.sh discover
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          version-file: pyproject.toml
+
+      - name: Set up Tectonic
+        uses: wtfjoke/setup-tectonic@v4
+        with:
+          tectonic-version: 0.17.0
 
       - name: Compile PDFs
-        uses: xu-cheng/latex-action@v4
-        with:
-          root_file: ${{ steps.tex.outputs.root_file }}
-          work_in_root_file_dir: true
-          latexmk_shell_escape: true
-          extra_system_packages: py3-pygments
+        shell: bash
+        run: tools/scripts/release.sh compile
 
       - name: Package folder zips
         id: package

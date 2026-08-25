@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 import re
 import sys
 import termios
@@ -14,7 +13,6 @@ from rich.console import Console
 
 console = Console()
 ROOT = Path.cwd()
-TEXBIN = Path("/Library/TeX/texbin")
 WEEK_RE = re.compile(r"week_(\d+)\.py\Z")
 KINDS = {"Lecture": ROOT / "lec", "Practical": ROOT / "prac"}
 
@@ -166,20 +164,17 @@ def latex_compile() -> int:
     if tex.suffix != ".tex" or not tex.is_file():
         console.print(f"[red]not a .tex file:[/] {tex}")
         return 2
-    env = {
-        **os.environ,
-        "PATH": f"{TEXBIN}{os.pathsep}{os.environ.get('PATH', '')}",
-    }
-    latexmk = str(TEXBIN / "latexmk")
-    flags = (
-        "-pdf",
-        "-interaction=nonstopmode",
-        "-halt-on-error",
-        "-quiet",
-        tex.name,
+    rc = call(
+        [
+            "tectonic",
+            "-X",
+            "compile",
+            "-Z",
+            "shell-escape-cwd=.",
+            tex.name,
+        ],
+        cwd=tex.parent,
     )
-    rc = call([latexmk, *flags], cwd=tex.parent, env=env)
-    call([latexmk, "-c", "-quiet", tex.name], cwd=tex.parent, env=env)
     console.print(
         ("[green]ok[/]" if rc == 0 else "[red]failed[/]")
         + f" {tex.with_suffix('.pdf').name}"
