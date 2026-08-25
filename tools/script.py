@@ -31,17 +31,23 @@ clean = lambda: call(
 )
 
 
-def fmt() -> int:
+def _language_args() -> tuple[str | None, list[str]]:
     args = sys.argv[1:]
-    python = call(["ruff", "format", *args, "."])
-    tex = call(["badness", "format", *args, "."])
+    language = args.pop(0) if args and args[0] in {"py", "tex"} else None
+    return language, args
+
+
+def fmt() -> int:
+    language, args = _language_args()
+    python = 0 if language == "tex" else call(["ruff", "format", *args, "."])
+    tex = 0 if language == "py" else call(["badness", "format", *args, "."])
     return python or tex
 
 
 def lint() -> int:
-    args = sys.argv[1:]
-    python = call(["ruff", "check", *args, "."])
-    tex = call(["badness", "lint", *args, "."])
+    language, args = _language_args()
+    python = 0 if language == "tex" else call(["ruff", "check", *args, "."])
+    tex = 0 if language == "py" else call(["badness", "lint", *args, "."])
     return python or tex
 
 

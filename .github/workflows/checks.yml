@@ -49,11 +49,17 @@ jobs:
           enable-cache: true
           version-file: pyproject.toml
 
-      - name: Ruff check
-        run: uvx --from ruff==0.16.0 ruff check --output-format=github
+      - name: Lint
+        run: uv run lint py
 
-      - name: Ruff format
-        run: uvx --from ruff==0.16.0 ruff format --check --output-format=github
+      - name: Format
+        run: uv run fmt py --check
+
+      - name: Typecheck
+        run: uv run typecheck
+
+      - name: Test
+        run: uv run python -m unittest discover -s tests -v
 
   tex:
     needs: changes
@@ -69,15 +75,8 @@ jobs:
           enable-cache: true
           version-file: pyproject.toml
 
-      - name: Badness lint and format
-        shell: bash
-        run: |
-          mapfile -t files < <(find . -type f -name '*.tex' ! -path './.git/*' ! -path './.venv/*' | sed 's|^\./||' | sort)
-          if ((${#files[@]} == 0)); then
-            echo "::error::No .tex files found"
-            exit 1
-          fi
-          printf 'Linting:\n'
-          printf '  %s\n' "${files[@]}"
-          uvx --from badness==0.10.0 badness lint "${files[@]}"
-          uvx --from badness==0.10.0 badness format --check "${files[@]}"
+      - name: Lint
+        run: uv run lint tex
+
+      - name: Format
+        run: uv run fmt tex --check
