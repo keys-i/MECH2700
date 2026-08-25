@@ -2,14 +2,18 @@
 Hydrocarbon-combustion Linear system using my implementation
 """
 
+import numpy as np
+
 
 def hydrocarbon_combustion():
-    A = [
-        [2.0, -1.0, 0.0],
-        [8.0, -1.0, -2.0],
-        [0.0, 4.0, -1.0],
-    ]
-    b = [4.0, 0.0, 0.0]
+    A = np.array(
+        [
+            [2.0, -1.0, 0.0],
+            [8.0, -1.0, -2.0],
+            [0.0, 2.0, -1.0],
+        ]
+    )
+    b = np.array([4.0, 0.0, 0.0])
     return A, b
 
 
@@ -106,11 +110,13 @@ def determine_coefficients(A, b):
         qi_fr = q * i - f * r
         er_qh = e * r - q * h
 
-        return [
-            (p * fj_gi - c * qj_gr + d * qi_fr) / determinant,
-            (a * qj_gr - p * ej_gh + d * er_qh) / determinant,
-            (a * (f * r - q * i) - c * er_qh + p * ei_fh) / determinant,
-        ]
+        return np.array(
+            [
+                (p * fj_gi - c * qj_gr + d * qi_fr) / determinant,
+                (a * qj_gr - p * ej_gh + d * er_qh) / determinant,
+                (a * (f * r - q * i) - c * er_qh + p * ei_fh) / determinant,
+            ]
+        )
 
     if n == 2:
         if len(A[0]) != 2 or len(A[1]) != 2:
@@ -124,10 +130,12 @@ def determine_coefficients(A, b):
             raise ValueError("A is singular and has no unique solution")
 
         p, q = b
-        return [
-            (p * e - c * q) / determinant,
-            (a * q - p * d) / determinant,
-        ]
+        return np.array(
+            [
+                (p * e - c * q) / determinant,
+                (a * q - p * d) / determinant,
+            ]
+        )
 
     if n == 1:
         if len(A[0]) != 1:
@@ -136,7 +144,7 @@ def determine_coefficients(A, b):
         pivot = A[0][0]
         if pivot == 0:
             raise ValueError("A is singular and has no unique solution")
-        return [b[0] / pivot]
+        return np.array([b[0] / pivot])
 
     if n == 0 or any(len(row) != n for row in A):
         raise ValueError("A must be a non-empty square matrix")
@@ -184,7 +192,7 @@ def determine_coefficients(A, b):
 
         coefficients[row] = total / row_values[row]
 
-    return coefficients
+    return np.array(coefficients)
 
 
 A, b = hydrocarbon_combustion()
