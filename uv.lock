@@ -30,18 +30,18 @@ wheels = [
 
 [[package]]
 name = "badness"
-version = "0.15.0"
+version = "0.17.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/c8/f1/8f6e14bc35e06d60a545a262b83f297c04dffcc66a865fecdbc4dcfa3848/badness-0.15.0.tar.gz", hash = "sha256:3feedd163ade54c078df7a4894471560a801a4e429aa5f386c3792d9c31b6bba", size = 917610, upload-time = "2026-08-07T08:44:45.573Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a6/a7/257a5ac67b3d815b3705c9b157d07b73b5db9197472a3f60677537f138eb/badness-0.17.0.tar.gz", hash = "sha256:7f7f8bb3ec42488f97968aa524f001e7dd029042f46f007013335bba6199908d", size = 1173001, upload-time = "2026-08-20T10:17:57.362Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/cf/99/d6fac10d160608ab2b1196dce3245d3526839000fc964fb999d5a991defd/badness-0.15.0-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:efcb96df1f1c697d7c49969140d5bec2c89dceb013cea823d785495e9a314a61", size = 3315993, upload-time = "2026-08-07T08:44:32.512Z" },
-    { url = "https://files.pythonhosted.org/packages/bd/48/260f314783ddb52c3d9b227f64fb2b291cf8ae7335ba8afde476ee072501/badness-0.15.0-py3-none-macosx_11_0_arm64.whl", hash = "sha256:128e181c1a5a475b402d5590877b9a2fd16eef6faf4275570ce5b0ebb7399cb8", size = 3182254, upload-time = "2026-08-07T08:44:34.12Z" },
-    { url = "https://files.pythonhosted.org/packages/00/1a/4a5332c414671e1070cbc2dbda29604ec7a013479215c7730949fd23be75/badness-0.15.0-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:ad812d848ce25feb33926522bac0a8cab92852f50e886e373f9f5b7ec93197af", size = 3348614, upload-time = "2026-08-07T08:44:35.633Z" },
-    { url = "https://files.pythonhosted.org/packages/39/ad/6d88cd7eef597c4d12a89f3f2caad5ca63975e0011c7fd4fdd641b025efc/badness-0.15.0-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:57ad8428652d13d84a743b0c85b191c484e1f58e110924b5558166a67fe6d2e4", size = 3552428, upload-time = "2026-08-07T08:44:37.098Z" },
-    { url = "https://files.pythonhosted.org/packages/49/c1/5850940073f190b973311328b9a28b604117e1343d32c9fe187fff6c8436/badness-0.15.0-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:b1caf9933c55a7f9708449db3b4b67ff2f22778281f79c9ccd977d775dfaa46a", size = 3217792, upload-time = "2026-08-07T08:44:38.897Z" },
-    { url = "https://files.pythonhosted.org/packages/c1/d8/6f3132ed7f2e97c2d8141f310fa35c8b6fc658c2eeb278c3e36ca69429c6/badness-0.15.0-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:445e66337e7a7f18837a69f1fdb13d8a3b49b43a78a0918821453d600e8d8f48", size = 3677702, upload-time = "2026-08-07T08:44:40.512Z" },
-    { url = "https://files.pythonhosted.org/packages/f6/00/08e4e6df71c141e3a81350f82c9658696ae2bc7f0dab1dbfeb0e51b69442/badness-0.15.0-py3-none-win_amd64.whl", hash = "sha256:9703b54727f22276f29e020b49265b7185ba79a8b064a62907b0d0ad4d3e581c", size = 3344960, upload-time = "2026-08-07T08:44:41.963Z" },
-    { url = "https://files.pythonhosted.org/packages/02/1a/78ecafe50734e30ccd91a70c3ed3554156ccbf6ac702adace97bfb890176/badness-0.15.0-py3-none-win_arm64.whl", hash = "sha256:de578f0fbae2a363ee760a22dbad653382a88c9f2f3a75d41b75703200b754f9", size = 3174281, upload-time = "2026-08-07T08:44:43.583Z" },
+    { url = "https://files.pythonhosted.org/packages/ef/10/664e9739c6725c2638f3c7ed38c8229723ead8545d856dceb6be116f5141/badness-0.17.0-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:d432b5d60a159fd20df3611131106f1049d310c2f85a857d964e8091d0a79889", size = 3784216, upload-time = "2026-08-20T10:17:40.533Z" },
+    { url = "https://files.pythonhosted.org/packages/43/d0/0af86c63bb531962601c122ee09b5862ee31cdff2850d2e9f6e656b30882/badness-0.17.0-py3-none-macosx_11_0_arm64.whl", hash = "sha256:6c8e849eb066707c6ce0c2e4e9172b0f9434e64d201f5389b542b15fcd5f9887", size = 3612266, upload-time = "2026-08-20T10:17:42.903Z" },
+    { url = "https://files.pythonhosted.org/packages/e9/03/5fd8d4775a23908adefce6206ed73efd17c5f49e0283fe1e5915d6c02cbe/badness-0.17.0-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:fb3839a3bb5cd7fdfafa4df4592e100b331d25490a46a3eef872b997a6d88c6b", size = 3779485, upload-time = "2026-08-20T10:17:44.914Z" },
+    { url = "https://files.pythonhosted.org/packages/58/1a/5ac24fd9ba36517866f021bfd1c0b42ad66c45b59ba85eb027369845982f/badness-0.17.0-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:24a679b05b7f035ea10712501720b7a08b9dc14a93bd5e309d536a4d804df43d", size = 3960813, upload-time = "2026-08-20T10:17:46.923Z" },
+    { url = "https://files.pythonhosted.org/packages/19/1d/aff0c4b146379fdfcb7c4ef83a9628681a5e6d463fe64a709fca789a4f5b/badness-0.17.0-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:a4a48cb7774ed7d8d04fded6dd97f396f41ec876a3a6274da36f65de84c4696d", size = 3645614, upload-time = "2026-08-20T10:17:49.193Z" },
+    { url = "https://files.pythonhosted.org/packages/6c/60/0d5e72acd1d9054d69d3727b3b1e37b5d850881ba4a30d1b3378b6fea354/badness-0.17.0-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:1be14acb84ba6f6f7adc45e58b763339b63843c7588e264ab5e9099ea452aa60", size = 4091502, upload-time = "2026-08-20T10:17:51.365Z" },
+    { url = "https://files.pythonhosted.org/packages/ad/62/3f499595b1da3dacec0d76a93fa524fe6380ae38fc929f3e8ed6abf2d70a/badness-0.17.0-py3-none-win_amd64.whl", hash = "sha256:187daf3b052f474d4a308aed34673945114dbde18a3a7e8053f036f265474797", size = 3821473, upload-time = "2026-08-20T10:17:53.239Z" },
+    { url = "https://files.pythonhosted.org/packages/ad/62/985ac7c8f19ed4f00640c9f2c6752c303da37f86c419e795c058b97ef114/badness-0.17.0-py3-none-win_arm64.whl", hash = "sha256:809574452abfa4af094959388da9519e2ff7c973c1c10f13966a5f47bdada0d7", size = 3627050, upload-time = "2026-08-20T10:17:55.392Z" },
 ]
 
 [[package]]
@@ -608,7 +608,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "badness", specifier = "==0.15.0" },
+    { name = "badness", specifier = "==0.17.0" },
     { name = "basedpyright", specifier = ">=1.39.10" },
     { name = "ipykernel" },
     { name = "ruff" },
