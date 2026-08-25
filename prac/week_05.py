@@ -10,7 +10,7 @@ def hydrocarbon_combustion():
         [
             [2, -1, 0],
             [8, -1, -2],
-            [0, 4, -1],
+            [0, 2, -1],
         ],
         dtype=float,
     )
