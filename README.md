@@ -7,7 +7,8 @@ Weekly exercises, lectures, tutorials, and assignments for MECH2700.
 
 ## Setup
 
-1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/).
+1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/) and
+   [Tectonic](https://tectonic-typesetting.github.io/book/latest/installation/).
 2. Clone and sync:
 
 ```bash
@@ -46,7 +47,7 @@ uv run python lec/week_01.py
 ```bash
 uv run clean                 # remove gitignored build artefacts (keeps .venv)
 uv run fmt [py|tex]          # format all files, or one language
-uv run latex-compile path.tex  # compile with MacTeX, strip aux files
+uv run latex-compile path.tex  # compile with Tectonic
 uv run lint [py|tex]         # lint all files, or one language
 uv run typecheck             # type-check Python files
 ```

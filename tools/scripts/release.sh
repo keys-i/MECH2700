@@ -2,19 +2,15 @@
 set -euo pipefail
 
 case "${1:-}" in
-discover)
+compile)
   mapfile -t files < <(find . -type f -name 'week_*.tex' ! -path './.git/*' | sed 's|^\./||' | sort)
   if ((${#files[@]} == 0)); then
     echo "::error::No week_*.tex files found"
     exit 1
   fi
-  {
-    echo "root_file<<EOF"
-    printf '%s\n' "${files[@]}"
-    echo "EOF"
-  } >> "$GITHUB_OUTPUT"
-  printf 'Found:\n'
-  printf '  %s\n' "${files[@]}"
+  for file in "${files[@]}"; do
+    uv run latex-compile "$file"
+  done
   ;;
 package)
   mkdir -p dist
@@ -48,7 +44,7 @@ package)
   echo "week=$latest" >> "$GITHUB_OUTPUT"
   ;;
 *)
-  echo "usage: $0 {discover|package}" >&2
+  echo "usage: $0 {compile|package}" >&2
   exit 2
   ;;
 esac
