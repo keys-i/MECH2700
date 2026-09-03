@@ -1,0 +1,68 @@
+\documentclass[a4paper]{exam}
+\usepackage[svgnames]{xcolor}
+\usepackage{amsmath,amssymb,amsthm,titlesec,minted}
+
+\newcommand
+\lralign[2]{%
+  \noindent\makebox[\textwidth]{\(\displaystyle#1\)\hfill\ifx&#2&\else(#2)\fi}\vspace{2ex}
+}
+
+\renewcommand{\thesubsection}{\alph{subsection}.}
+\renewcommand{\thesubsubsection}{\roman{subsubsection}.}
+
+\definecolor{faintgreen}{rgb}{0.5,1,0.5}
+\definecolor{faintred}{rgb}{1,0.5,0.5}
+\definecolor{faintblue}{rgb}{0.5,0.5,1}
+\definecolor{faintyellow}{rgb}{1,1,0.5}
+\definecolor{codebg}{RGB}{40,42,54}
+
+\titleformat{\section}{\normalfont\Large\bfseries}{}{0pt}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{}{0pt}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\itshape}{}{0pt}{}
+\titlespacing*{\section}{1em}{1.6\baselineskip}{0.6\baselineskip}
+\titlespacing*{\subsection}{2em}{1.2\baselineskip}{0.4\baselineskip}
+\titlespacing*{\subsubsection}{4em}{1.0\baselineskip}{0.3\baselineskip}
+
+\setminted{style=dracula,bgcolor=codebg,breaklines,autogobble,fontsize=\small,tabsize=4,baselinestretch=1}
+\NewDocumentCommand{\codefromfile}{O{}mm}{\par\vspace{0.4em}\inputminted[#1]{#2}{#3}\par\vspace{0.4em}}
+\NewDocumentEnvironment{Section}{m}
+{%
+  \section*{#1}%
+  \begingroup
+  \leftskip=1em
+}
+{%
+  \par
+  \endgroup
+}
+
+\NewDocumentEnvironment{Subsection}{m}
+{%
+  \subsection*{#1}%
+  \begingroup
+  \leftskip=2em
+}
+{%
+  \par
+  \endgroup
+}
+
+\setlength{\parindent}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.8in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{18pt}
+
+\printanswers
+\title{Week 6}
+\author{Radhesh Goel}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Question 1.}
+\begin{solution}
+\end{solution}
+\end{document}
