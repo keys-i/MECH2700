@@ -4,9 +4,12 @@ version = "0.6.1"
 requires-python = ">=3.12"
 dependencies = [
     "matplotlib",
+    "numba>=0.67.0",
     "numpy",
     "pandas",
+    "plotly>=7.0.0",
     "rich",
+    "scipy>=1.18.1",
 ]
 
 [project.scripts]

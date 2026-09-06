@@ -7,6 +7,7 @@ import re
 import sys
 import termios
 import tty
+from argparse import ArgumentParser
 from pathlib import Path
 from select import select
 from statistics import mode
@@ -133,7 +134,8 @@ def _menu(
             elif ch in (b"q", b"Q"):
                 raise SystemExit(1)
     finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old)
+        # Discard leftover menu keystrokes before the next input prompt
+        termios.tcsetattr(fd, termios.TCSAFLUSH, old)
         sys.stdout.write("\033[?25h")
         sys.stdout.flush()
 
@@ -159,32 +161,63 @@ def _scripts(folder: Path) -> dict[str, list[Path]]:
 
 
 def code() -> int:
-    kinds = list(KINDS)
-    while (kind := _menu("Type", kinds)) is not None:
-        folder = KINDS[kinds[kind[0]]]
-        entries = _scripts(folder)
-        if not entries:
-            console.print(f"[red]no scripts in {folder}[/]")
-            return 1
-        choices = [
-            [
-                "Advanced"
-                if (name := p.stem.partition(".")[2]).lower() == "adv"
-                else name.replace("_", " ").title() or "Normal"
-                for p in paths
-            ]
-            for paths in entries.values()
-        ]
-        selected = _menu(
-            next(iter(entries)).rsplit(" ", 1)[0], list(entries), choices
+    parser = ArgumentParser(description="Run a script or open the menu")
+    parser.add_argument("target", nargs="?", metavar="folder/number")
+    parser.add_argument(
+        "mode",
+        nargs="?",
+        default="norm",
+        choices=("norm", "normal", "adv", "advanced"),
+        help="script version (default: norm)",
+    )
+    args = parser.parse_args()
+    if args.target is not None:
+        folder_name, _, number = args.target.partition("/")
+        folder = ROOT / folder_name
+        if folder not in KINDS.values() or not number.isdecimal():
+            parser.error("use lec/number, prac/number or assign/number")
+        suffix = "adv" if args.mode in ("adv", "advanced") else ""
+        script = next(
+            (
+                path
+                for label, paths in _scripts(folder).items()
+                if int(label.rsplit(" ", 1)[1]) == int(number)
+                for path in paths
+                if path.stem.partition(".")[2].lower() == suffix
+            ),
+            None,
         )
-        if selected is None:
-            continue
-        index, choice = selected
-        script = list(entries.values())[index][choice]
-        console.print(f"[dim]running[/] [bold]{script.relative_to(ROOT)}[/]")
-        return call([sys.executable, str(script)], cwd=ROOT)
-    return 0
+        if script is None:
+            parser.error(f"no {args.mode} script for {args.target}")
+    else:
+        kinds = list(KINDS)
+        while (kind := _menu("Type", kinds)) is not None:
+            folder = KINDS[kinds[kind[0]]]
+            entries = _scripts(folder)
+            if not entries:
+                console.print(f"[red]no scripts in {folder}[/]")
+                return 1
+            choices = [
+                [
+                    "Advanced"
+                    if (name := p.stem.partition(".")[2]).lower() == "adv"
+                    else name.replace("_", " ").title() or "Normal"
+                    for p in paths
+                ]
+                for paths in entries.values()
+            ]
+            selected = _menu(
+                next(iter(entries)).rsplit(" ", 1)[0], list(entries), choices
+            )
+            if selected is None:
+                continue
+            index, choice = selected
+            script = list(entries.values())[index][choice]
+            break
+        else:
+            return 0
+    console.print(f"[dim]running[/] [bold]{script.relative_to(ROOT)}[/]")
+    return call([sys.executable, str(script)], cwd=ROOT)
 
 
 def latex_compile() -> int:
