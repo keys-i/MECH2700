@@ -19,14 +19,14 @@ typecheck = "tools.script:typecheck"
 
 [dependency-groups]
 dev = [
-    "badness==0.17.0",
+    "badness==0.22.1",
     "basedpyright>=1.39.10",
     "ipykernel",
     "ruff",
 ]
 
 [build-system]
-requires = ["uv_build>=0.12.5,<0.13.0"]
+requires = ["uv_build>=0.12.6,<0.13.0"]
 build-backend = "uv_build"
 
 [tool.uv]
