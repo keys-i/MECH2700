@@ -1,0 +1,4 @@
+[submodule "assign"]
+	path = assign
+	url = https://github.com/keys-i/MECH2700-assign
+	branch = main
