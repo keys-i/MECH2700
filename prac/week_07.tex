@@ -63,7 +63,85 @@
 \maketitle
 
 \section*{Question 1.}
+Write the aircraft equation of motion as a system of two first-order ODEs.
 
 \begin{solution}
+    The equation of motion is
+    \[
+        m\ddot{x} = F - \frac{1}{2}C_D A_{\mathrm{ref}}\rho V^2
+    \]
+
+    Define the velocity as
+    \[
+        V = \dot{x}
+    \]
+
+    Therefore,
+    \[
+      \dot{V} = \ddot{x}
+    \]
+
+    Dividing the equation of motion by the mass gives
+    \[
+        \dot{V} = \frac{F}{m} - \frac{C_D A_{\mathrm{ref}}\rho}{2m}V^2
+    \]
+
+    Hence, the required first-order system is
+    \[\boxed{
+        \begin{aligned}
+            \frac{dx}{dt} &= V \\[0.5em]
+            \frac{dV}{dt} &= \frac{F}{m}
+            - \frac{C_D A_{\mathrm{ref}}\rho}{2m}
+            V^2
+        \end{aligned}
+    }\]
+
+    Using
+    \[
+        \begin{aligned}
+        F &= 242000\ \mathrm{N}, & m &= 70000\ \mathrm{kg} \\
+        C_D &= 0.08, & A_{\mathrm{ref}} &= 125\ \mathrm{m^2} \\
+        \rho &= 1.225\ \mathrm{kg\,m^{-3}}
+        \end{aligned}
+    \]
+
+    gives
+    \[
+        \frac{F}{m} = \frac{242000}{70000} \approx 3.457143\ \mathrm{m\,s^{-2}}
+    \]
+
+    and
+    \[
+        \frac{C_D A_{\mathrm{ref}}\rho}{2m}
+          = \frac{(0.08)(125)(1.225)}{2(70000)}
+          = 8.75 \times 10^{-5}\ \mathrm{m^{-1}}
+    \]
+
+    With position and velocity expressed in SI units,
+    \[\boxed{
+        \begin{aligned}
+          \frac{dx}{dt} &= V \\[0.5em]
+          \frac{dV}{dt} &= \frac{242000 -
+          6.125V^2}{70000}
+        \end{aligned}
+    }\]
+
+    Taking the state vector as
+    \[
+        \mathbf{y} = 
+            \begin{bmatrix}
+                x \\ v
+            \end{bmatrix}
+    \]
+
+    the system can be written as
+    \[\boxed{
+        \frac{d\mathbf{y}}{dt}
+            = \mathbf{f}(t,\mathbf{y})
+            = \begin{bmatrix}
+                V \\[0.5em]
+                \dfrac{242000 - 6.125V^2}{70000}
+            \end{bmatrix}
+    }\]
 \end{solution}
 \end{document}
