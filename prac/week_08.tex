@@ -1,0 +1,49 @@
+\documentclass[a4paper]{exam}
+\usepackage{amsmath,amssymb,titlesec}
+\usepackage[a4paper,margin=22mm]{geometry}
+
+\titleformat{\section}{\normalfont\Large\bfseries}{}{0pt}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{}{0pt}{}
+\titlespacing*{\section}{1em}{1.6\baselineskip}{0.6\baselineskip}
+\titlespacing*{\subsection}{2em}{1.2\baselineskip}{0.4\baselineskip}
+
+\setlength{\parindent}{0in}
+\setlength{\headheight}{18pt}
+
+\printanswers
+\title{Week 8}
+\author{Radhesh Goel}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Question 1.}
+
+Rearrange the velocity equation into a root-finding problem and verify
+that \(50\ \mathrm{kPa} \leq p \leq p_0\) contains a root.
+
+\begin{solution}
+  Subtracting the measured velocity gives
+  \[
+    \boxed{f(p)=\sqrt{2c_pT_0
+      \left[1-\left(\frac{p}{p_0}\right)^{(\gamma-1)/\gamma}\right]}-700=0}
+  \]
+  With all pressures in pascals,
+  \[
+    f(p)=\sqrt{1809000\left[1-
+      \left(\frac{p}{350000}\right)^{2/7}\right]}-700
+  \]
+  This function is continuous on \([50000,350000]\), since the square-root
+  argument is non-negative throughout the interval. At its endpoints,
+  \[
+    \begin{aligned}
+      f(50000)&\approx 178.359052\ \mathrm{m\,s^{-1}}>0,\\
+      f(350000)&=-700\ \mathrm{m\,s^{-1}}<0.
+    \end{aligned}
+  \]
+  Therefore, the Intermediate Value Theorem guarantees at least one root.
+  The velocity decreases strictly as pressure increases, so this root is
+  unique.
+\end{solution}
+\end{document}

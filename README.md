@@ -25,11 +25,11 @@ That creates `.venv` and installs project dependencies (Python ≥ 3.12).
 | ------ | -------- |
 | `prac/` | Practical scripts and write-ups (`week_01.py`, `week_01.tex`, …) |
 | `lec/` | Lecture code (`week_01.py`, …) |
-| `assign/` | Assignments |
+| `assign/<number>/` | Assignment scripts, write-ups and assets |
 
 ## Run codes
 
-Interactive menu (Lecture / Practical → week, or Assignment → task):
+Interactive menu (Lecture / Practical → week, or Assignment → number → task):
 
 ```bash
 uv run code
@@ -43,17 +43,20 @@ Files named `<item>.<choice>.py` become left/right arrow choices; the plain
 Use up/down to select an item and Enter to run it. Escape goes back one menu
 or exits at the type menu. Outside a terminal, use numbered input and `esc`.
 
-Skip the menu with `uv run code <folder>/<number> [mode]`:
+Skip the menu with `uv run code assign/<assignment>/<task> [mode]`, or
+`uv run code <lec|prac>/<week> [mode]`:
 
 ```bash
-uv run code assign/6       # normal by default
-uv run code assign/6 norm
-uv run code assign/6 adv
+uv run code assign/1/6          # Normal version by default
+uv run code assign/1/6 adv
+uv run code assign/6           # Shortcut for Assignment 1, Task 6
 uv run code prac/2 adv     # runs prac/week_02.adv.py
 uv run code lec/1
 ```
 
-Modes also accept `normal` and `advanced`. Use `uv run code --help` for usage.
+The default mode is `norm`, with `normal` and `advanced` aliases for `norm`
+and `adv`.
+Use `uv run code --help` for usage.
 
 Or run a file directly:
 
@@ -80,11 +83,11 @@ That creates `.venv` and installs project dependencies (Python ≥ 3.12).
 | `prac/` | Practical scripts and write-ups (`week_01.py`, `week_01.tex`, …) |
 | `lec/` | Lecture code (`week_01.py`, …) |
 | `tuts/` | Tutorials (`W<number>/`) |
-| `assign/` | Assignments |
+| `assign/<number>/` | Assignment scripts, write-ups and assets |
 
 ## Run codes
 
-Interactive menu (Lecture / Practical → week, or Assignment → task):
+Interactive menu (Lecture / Practical → week, or Assignment → number → task):
 
 ```bash
 uv run code

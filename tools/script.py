@@ -143,7 +143,7 @@ def _menu(
 def _scripts(folder: Path) -> dict[str, list[Path]]:
     """Group choices under the most common numbered filename prefix"""
     groups: dict[tuple[str, str], list[Path]] = {}
-    for path in sorted(folder.glob("*.py")):
+    for path in sorted((*folder.glob("*.py"), *folder.glob("[!.]*/*.py"))):
         match = re.fullmatch(r"(.*[^0-9])([0-9]+)", path.stem.split(".")[0])
         if path.is_file() and match:
             groups.setdefault((match[1], match[2]), []).append(path)
@@ -152,7 +152,9 @@ def _scripts(folder: Path) -> dict[str, list[Path]]:
     prefix = mode(name for name, _ in sorted(groups))
     label = prefix.replace("_", " ").replace("-", " ").strip().title()
     return {
-        f"{label} {number}": sorted(paths, key=lambda p: "." in p.stem)
+        f"{label} {number}": sorted(
+            paths, key=lambda p: (p.parent != folder, "." in p.stem)
+        )
         for (name, number), paths in sorted(
             groups.items(), key=lambda p: int(p[0][1])
         )
@@ -160,30 +162,73 @@ def _scripts(folder: Path) -> dict[str, list[Path]]:
     }
 
 
+def _version(path: Path, folder: Path) -> str:
+    version = path.stem.partition(".")[2]
+    if path.parent != folder:
+        version = f"{path.parent.name}/{version}".rstrip("/")
+    return version.lower()
+
+
+def _pick_script(folder: Path) -> Path | None:
+    entries = _scripts(folder)
+    if not entries:
+        console.print(f"[red]no scripts in {folder}[/]")
+        return None
+    choices = [
+        [
+            "Advanced"
+            if (name := _version(p, folder)) == "adv"
+            else name.replace("_", " ").title() or "Normal"
+            for p in paths
+        ]
+        for paths in entries.values()
+    ]
+    selected = _menu(
+        next(iter(entries)).rsplit(" ", 1)[0], list(entries), choices
+    )
+    if selected is None:
+        return None
+    index, choice = selected
+    return list(entries.values())[index][choice]
+
+
 def code() -> int:
     parser = ArgumentParser(description="Run a script or open the menu")
-    parser.add_argument("target", nargs="?", metavar="folder/number")
+    parser.add_argument(
+        "target",
+        nargs="?",
+        help="lec/week, prac/week or assign/assignment/task",
+    )
     parser.add_argument(
         "mode",
         nargs="?",
         default="norm",
-        choices=("norm", "normal", "adv", "advanced"),
-        help="script version (default: norm)",
+        help="filename suffix or subfolder (default: norm)",
     )
     args = parser.parse_args()
     if args.target is not None:
-        folder_name, _, number = args.target.partition("/")
+        folder_name, _, number = args.target.rpartition("/")
         folder = ROOT / folder_name
-        if folder not in KINDS.values() or not number.isdecimal():
-            parser.error("use lec/number, prac/number or assign/number")
-        suffix = "adv" if args.mode in ("adv", "advanced") else ""
+        if folder == KINDS["Assignment"]:
+            folder = folder / "1"
+        valid_folder = folder in (KINDS["Lecture"], KINDS["Practical"]) or (
+            folder.parent == KINDS["Assignment"] and folder.name.isdecimal()
+        )
+        if not valid_folder or not number.isdecimal():
+            parser.error(
+                "use lec/week, prac/week or assign/assignment/task "
+                "(assign/task selects assignment 1)"
+            )
+        suffix = {"norm": "", "normal": "", "advanced": "adv"}.get(
+            args.mode, args.mode
+        )
         script = next(
             (
                 path
                 for label, paths in _scripts(folder).items()
                 if int(label.rsplit(" ", 1)[1]) == int(number)
                 for path in paths
-                if path.stem.partition(".")[2].lower() == suffix
+                if _version(path, folder) == suffix
             ),
             None,
         )
@@ -191,31 +236,32 @@ def code() -> int:
             parser.error(f"no {args.mode} script for {args.target}")
     else:
         kinds = list(KINDS)
-        while (kind := _menu("Type", kinds)) is not None:
+        script = None
+        while script is None:
+            kind = _menu("Type", kinds)
+            if kind is None:
+                return 0
             folder = KINDS[kinds[kind[0]]]
-            entries = _scripts(folder)
-            if not entries:
-                console.print(f"[red]no scripts in {folder}[/]")
-                return 1
-            choices = [
-                [
-                    "Advanced"
-                    if (name := p.stem.partition(".")[2]).lower() == "adv"
-                    else name.replace("_", " ").title() or "Normal"
-                    for p in paths
-                ]
-                for paths in entries.values()
-            ]
-            selected = _menu(
-                next(iter(entries)).rsplit(" ", 1)[0], list(entries), choices
-            )
-            if selected is None:
-                continue
-            index, choice = selected
-            script = list(entries.values())[index][choice]
-            break
-        else:
-            return 0
+            if folder == KINDS["Assignment"]:
+                assignments = sorted(
+                    (
+                        p
+                        for p in folder.glob("[0-9]*")
+                        if p.name.isdecimal() and p.is_dir()
+                    ),
+                    key=lambda p: int(p.name),
+                )
+                if not assignments:
+                    console.print(f"[red]no assignments in {folder}[/]")
+                    continue
+                labels = [f"Assignment {p.name}" for p in assignments]
+                while script is None:
+                    selected = _menu("Assignment", labels)
+                    if selected is None:
+                        break
+                    script = _pick_script(assignments[selected[0]])
+            else:
+                script = _pick_script(folder)
     console.print(f"[dim]running[/] [bold]{script.relative_to(ROOT)}[/]")
     return call([sys.executable, str(script)], cwd=ROOT)
 
