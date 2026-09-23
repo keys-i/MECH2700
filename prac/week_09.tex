@@ -1,0 +1,83 @@
+\documentclass[a4paper]{exam}
+\usepackage{amsmath,amssymb,titlesec}
+\usepackage[a4paper,margin=22mm]{geometry}
+
+\titleformat{\section}{\normalfont\Large\bfseries}{}{0pt}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{}{0pt}{}
+\titlespacing*{\section}{1em}{1.6\baselineskip}{0.6\baselineskip}
+\titlespacing*{\subsection}{2em}{1.2\baselineskip}{0.4\baselineskip}
+
+\setlength{\parindent}{0in}
+\setlength{\headheight}{18pt}
+
+\printanswers
+\title{Week 9}
+\author{Radhesh Goel}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Question 1.}
+
+\subsection*{a) Surface area as a function of radius}
+
+\begin{solution}
+  The fixed-volume constraint and its rearrangement for height are
+  \[
+    V=\pi r^2h,
+    \qquad
+    h=\frac{V}{\pi r^2}.
+  \]
+  Substituting this into the surface-area equation,
+  \[
+    \begin{aligned}
+      A(r)
+      &=2\pi r\left(\frac{V}{\pi r^2}\right)+2\pi r^2 \\
+      &=\frac{2V}{r}+2\pi r^2.
+    \end{aligned}
+  \]
+  Therefore, for a physically meaningful radius \(r>0\),
+  \[
+    \boxed{A(r)=\frac{2V}{r}+2\pi r^2}.
+  \]
+  For \(V=10\ \mathrm{m^3}\), this becomes
+  \(A(r)=20/r+2\pi r^2\).
+\end{solution}
+
+\subsection*{b) Bracketing the minimum}
+
+\begin{solution}
+  For \(V=10\ \mathrm{m^3}\), begin with \(a=1.5\) and \(b=2.0\). The
+  corresponding surface areas are
+  \[
+    \begin{aligned}
+      A(a)&=A(1.5)=\frac{20}{1.5}+2\pi(1.5)^2
+            \approx 27.4705\ \mathrm{m^2},\\
+      A(b)&=A(2.0)=\frac{20}{2.0}+2\pi(2.0)^2
+            \approx 35.1327\ \mathrm{m^2}.
+    \end{aligned}
+  \]
+  Since \(A(b)>A(a)\), the downhill direction is towards decreasing radius.
+  Swap \(a\) and \(b\), giving \(a=2.0\) and \(b=1.5\), then calculate
+  \[
+    c=b+k(b-a)
+      =1.5+1.6(1.5-2.0)
+      =0.7.
+  \]
+  At this point,
+  \[
+    A(c)=A(0.7)=\frac{20}{0.7}+2\pi(0.7)^2
+         \approx 31.6502\ \mathrm{m^2}.
+  \]
+  \par\noindent
+  Since \(A(b)<A(a)\) and \(A(b)<A(c)\), the minimum is bracketed. The
+  algorithm gives
+  \[
+    \boxed{a=2.0,\qquad b=1.5,\qquad c=0.7},
+  \]
+  which corresponds to the interval \(0.7<r<2.0\ \mathrm{m}\), with the
+  middle point at \(r=1.5\ \mathrm{m}\).
+\end{solution}
+
+\end{document}
