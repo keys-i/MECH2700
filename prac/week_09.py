@@ -1,7 +1,7 @@
 """Fit a Chebyshev model to sounding-rocket telemetry"""
 
+import matplotlib.pyplot as plt
 import numpy as np
-
 
 def eval_model(x, phi, alpha):
     """Evaluate a model defined by basis functions and coefficients"""
@@ -87,7 +87,6 @@ def main():
 
 
 if __name__ == "__main__":
-    import matplotlib.pyplot as plt
 
     polynomials = chebyshev_polynomials()
     np.testing.assert_allclose(
