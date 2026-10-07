@@ -1,0 +1,49 @@
+\documentclass[a4paper]{exam}
+\usepackage{amsmath,amssymb,titlesec}
+\usepackage[a4paper,margin=22mm]{geometry}
+
+\titleformat{\section}{\normalfont\Large\bfseries}{}{0pt}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{}{0pt}{}
+\titlespacing*{\section}{1em}{1.6\baselineskip}{0.6\baselineskip}
+\titlespacing*{\subsection}{2em}{1.2\baselineskip}{0.4\baselineskip}
+
+\setlength{\parindent}{0in}
+\setlength{\headheight}{18pt}
+
+\printanswers
+\title{Week 10}
+\author{Radhesh Goel}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Question 1}
+
+\subsection*{a) Temperature at the heat-flux boundary}
+
+\begin{solution}
+  At the left boundary, Fourier's law gives
+  \[
+    q_{\mathrm{in}} = -k\left. \frac{\partial T}{\partial x} \right|_{x=0}
+  \]
+  Using a first-order forward difference at time level \(m\),
+  \[
+    \left. \frac{\partial T}{\partial x} \right|_{x=0,t=t_m} \approx \frac{T_1^m - T_0^m}{\Delta x}
+  \]
+  Therefore,
+  \[
+    q_{\mathrm{in}} = -k\frac{T_1^m - T_0^m}{\Delta x}
+  \]
+  Rearranging for the boundary temperature gives
+  \[
+    \boxed{T_0^m=T_1^m+\frac{q_{\mathrm{in}}\Delta x}{k}}
+  \]
+  A positive heat flux entering the rod requires \(T_0^m > T_1^m\), consistent
+  with heat flowing towards increasing \(x\)
+\end{solution}
+
+\subsection*{b) Order of accuracy}
+
+
+\end{document}
