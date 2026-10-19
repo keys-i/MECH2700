@@ -46,6 +46,7 @@ reportUnknownVariableType = false
 typeCheckingMode = "standard"
 
 [tool.ruff]
+cache-dir = ".cache/ruff"
 line-length = 80
 
 [tool.ruff.lint]
