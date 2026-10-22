@@ -1,0 +1,155 @@
+\documentclass[a4paper]{exam}
+\usepackage{amsmath,amssymb,titlesec}
+\usepackage[a4paper,margin=22mm]{geometry}
+
+\titleformat{\section}{\normalfont\Large\bfseries}{}{0pt}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{}{0pt}{}
+\titlespacing*{\section}{1em}{1.6\baselineskip}{0.6\baselineskip}
+\titlespacing*{\subsection}{2em}{1.2\baselineskip}{0.4\baselineskip}
+
+\setlength{\parindent}{0in}
+\setlength{\headheight}{18pt}
+
+\printanswers
+\title{Week 12}
+\author{Radhesh Goel}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Part 1 Theory}
+
+\begin{solution}
+  Write Burgers' equation in conservation form with flux
+  \[
+    f(u) = \frac{u^2}{2}
+  \]
+  The Rankine--Hugoniot condition gives the shock speed
+  \[
+    \begin{aligned}
+      V_s & = \frac{f(u_L) - f(u_R)}{u_L - u_R}  \\
+          & = \frac{u_L^2 - u_R^2}{2(u_L - u_R)} \\
+          & = \frac{u_L + u_R}{2}
+    \end{aligned}
+  \]
+  For \(u_L = 2\ \mathrm{m\,s^{-1}}\) and \(u_R = 1\ \mathrm{m\,s^{-1}}\),
+  \[
+    \boxed{V_s=1.5\ \mathrm{m\,s^{-1}}}
+  \]
+\end{solution}
+
+\section*{Part 2 Programming}
+
+\begin{solution}
+  Both velocities are positive, so information travels from left to right and
+  the upwind flux at node \(i\) comes from node \(i - 1\)
+  \[
+    \frac{u_i^{n+1} - u_i^n}{\Delta t} + \frac{(u_i^n)^2/2 - (u_{i-1}^n)^2/2}{\Delta x} = 0
+  \]
+  Solving for the new value gives the implemented update
+  \[
+    \boxed{
+      u_i^{n+1}=u_i^n-
+      \frac{\Delta t}{2\Delta x}
+      \left[(u_i^n)^2-(u_{i-1}^n)^2\right]
+    }
+  \]
+  Running the supplied problem with this update gives
+  \[
+    V_{s,\mathrm{conservative}} \approx 1.4993446\ \mathrm{m\,s^{-1}}
+  \]
+  This differs from the theoretical value by about \(0.0437\%\), whereas the
+  original convective update gives
+  \[
+    V_{s,\mathrm{convective}} \approx 1.4145145\ \mathrm{m\,s^{-1}}
+  \]
+  which is about \(5.70\%\) low
+
+  The conservative form is therefore much more accurate for the shock because it
+  enforces the discrete flux balance and hence the Rankine--Hugoniot jump
+  condition
+
+  The convective and conservative differential forms are equivalent for smooth
+  solutions, but the product-rule step connecting them is invalid across a
+  discontinuity
+\end{solution}
+
+\section*{Practice Question 1}
+
+\begin{solution}
+  Taylor expansion about node \((i,j)\) gives
+  \[
+    \frac{u_{i+1,j} - 2u_{i,j} + u_{i-1,j}}{h^2} = u_{xx}
+                                                   + \frac{h^2}{12}u_{xxxx}
+                                                   + O(h^4)
+  \]
+  and similarly
+  \[
+    \frac{u_{i,j+1} - 2u_{i,j} + u_{i,j-1}}{h^2} = u_{yy}
+                                                   + \frac{h^2}{12}u_{yyyy}
+                                                   + O(h^4)
+  \]
+  The discrete PDE therefore represents
+  \[
+    u_{xx} + u_{yy} + \frac{h^2}{12}\left( u_{xxxx} + u_{yyyy} \right) + O(h^4) = 0
+  \]
+  Using the residual convention for local truncation error, its leading term is
+  \[
+    \boxed{
+      \tau_{i,j}=\frac{h^2}{12}
+      \left(u_{xxxx}+u_{yyyy}\right)
+    }
+  \]
+  Differentiating \(u_{xx} + u_{yy} = 0\) twice also gives the equivalent form
+  \[
+    \boxed{\tau_{i,j}=-\frac{h^2}{6}u_{xxyy}}
+  \]
+  so the central-difference Laplacian is second-order accurate
+\end{solution}
+
+\section*{Practice Question 2}
+
+\begin{solution}
+  Let \(h_c\) denote the heat-transfer coefficient so it is not confused with
+  the grid spacing used in Question 1
+
+  A first-order backward difference uses the boundary node and the adjacent
+  interior node
+  \[
+    \boxed{
+      \frac{T_{3,3}-T_{3,2}}{\Delta y}
+      =h_c\left(T_{3,3}-T_a\right)
+    }
+  \]
+  Equivalently,
+  \[
+    \boxed{
+      T_{3,3}
+      =\frac{T_{3,2}-h_c\Delta y\,T_a}
+      {1-h_c\Delta y}
+    }
+  \]
+\end{solution}
+
+\section*{Practice Question 3}
+
+\begin{solution}
+  The second-order backward approximation at the top boundary is
+  \[
+    \boxed{
+      \frac{3T_{3,3}-4T_{3,2}+T_{3,1}}{2\Delta y}
+      =h_c\left(T_{3,3}-T_a\right)
+    }
+  \]
+  Solving for the boundary temperature gives
+  \[
+    \boxed{
+      T_{3,3}
+      =\frac{4T_{3,2}-T_{3,1}-2h_c\Delta y\,T_a}
+      {3-2h_c\Delta y}
+    }
+  \]
+\end{solution}
+
+\end{document}
