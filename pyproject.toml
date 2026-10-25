@@ -23,7 +23,7 @@ typecheck = "tools.script:typecheck"
 
 [dependency-groups]
 dev = [
-    "badness==0.27.0",
+    "badness==0.28.0",
     "basedpyright>=1.40.2",
     "ipykernel",
     "ruff",
