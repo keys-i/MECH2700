@@ -3,6 +3,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 def eval_model(x, phi, alpha):
     """Evaluate a model defined by basis functions and coefficients"""
     assert len(phi) == len(alpha)
@@ -87,7 +88,6 @@ def main():
 
 
 if __name__ == "__main__":
-
     polynomials = chebyshev_polynomials()
     np.testing.assert_allclose(
         [polynomial(0.5) for polynomial in polynomials],

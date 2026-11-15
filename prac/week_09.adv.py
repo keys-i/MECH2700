@@ -22,6 +22,7 @@ altitude_km = [
 
 time_s = [0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280]
 
+
 def quantify_error(y, y_fit):
     """Return the sum of squared errors between two equally shaped arrays"""
     y = np.asarray(y, dtype=float)
@@ -29,7 +30,6 @@ def quantify_error(y, y_fit):
     if y.shape != y_fit.shape:
         raise ValueError("y and y_fit must have the same shape")
     return float(np.sum((y - y_fit) ** 2))
-
 
 
 def main():
