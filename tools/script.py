@@ -266,27 +266,20 @@ def code() -> int:
     return call([sys.executable, str(script)], cwd=ROOT)
 
 
-def latex_compile() -> int:
+def typst_compile() -> int:
     if len(sys.argv) < 2:
-        console.print("[red]usage:[/] uv run latex-compile <path.tex>")
+        console.print("[red]usage:[/] uv run typst-compile <path.typ>")
         return 2
-    tex = Path(sys.argv[1]).expanduser().resolve()
-    if tex.suffix != ".tex" or not tex.is_file():
-        console.print(f"[red]not a .tex file:[/] {tex}")
+    source = Path(sys.argv[1]).expanduser().resolve()
+    if source.suffix != ".typ" or not source.is_file():
+        console.print(f"[red]not a .typ file:[/] {source}")
         return 2
     rc = call(
-        [
-            "tectonic",
-            "-X",
-            "compile",
-            "-Z",
-            "shell-escape-cwd=.",
-            tex.name,
-        ],
-        cwd=tex.parent,
+        ["typst", "compile", "--diagnostic-format=short", source.name],
+        cwd=source.parent,
     )
     console.print(
         ("[green]ok[/]" if rc == 0 else "[red]failed[/]")
-        + f" {tex.with_suffix('.pdf').name}"
+        + f" {source.with_suffix('.pdf').name}"
     )
     return rc

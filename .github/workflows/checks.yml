@@ -5,10 +5,12 @@ on:
     paths:
       - "**/*.py"
       - "**/*.tex"
+      - "**/*.typ"
   pull_request:
     paths:
       - "**/*.py"
       - "**/*.tex"
+      - "**/*.typ"
 
 permissions:
   contents: read
@@ -24,6 +26,7 @@ jobs:
     outputs:
       python: ${{ steps.filter.outputs.python }}
       tex: ${{ steps.filter.outputs.tex }}
+      typst: ${{ steps.filter.outputs.typst }}
     steps:
       - uses: actions/checkout@v7
       - uses: dorny/paths-filter@v4
@@ -34,6 +37,8 @@ jobs:
               - '**/*.py'
             tex:
               - '**/*.tex'
+            typst:
+              - '**/*.typ'
 
   python:
     needs: changes
@@ -77,3 +82,24 @@ jobs:
 
       - name: Format
         run: uv run fmt tex --check
+
+  typst:
+    needs: changes
+    if: needs.changes.outputs.typst == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          version-file: pyproject.toml
+
+      - name: Set up Typst
+        uses: typst-community/setup-typst@v4
+
+      - name: Compile
+        shell: bash
+        run: tools/scripts/release.sh compile

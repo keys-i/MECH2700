@@ -8,7 +8,9 @@ Weekly exercises, lectures, tutorials, and assignments for MECH2700.
 ## Setup
 
 1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/) and
-   [Tectonic](https://tectonic-typesetting.github.io/book/latest/installation/).
+   [Typst](https://typst.app/open-source/#download). Install
+   [Tectonic](https://tectonic-typesetting.github.io/book/latest/installation/)
+   as well if you need to compile assignment TeX files
 2. Clone and sync:
 
 ```bash
@@ -23,8 +25,9 @@ That creates `.venv` and installs project dependencies (Python ≥ 3.12).
 
 | Folder | Contents |
 | ------ | -------- |
-| `prac/` | Practical scripts and write-ups (`week_01.py`, `week_01.tex`, …) |
+| `prac/` | Practical scripts and write-ups (`week_01.py`, `week_01.typ`, …) |
 | `lec/` | Lecture code (`week_01.py`, …) |
+| `tuts/` | Tutorials (`W<number>/`) |
 | `assign/<number>/` | Assignment scripts, write-ups and assets |
 
 ## Run codes
@@ -70,39 +73,7 @@ uv run python lec/week_01.py
 ```bash
 uv run clean                 # remove gitignored build artefacts (keeps .venv)
 uv run fmt [py|tex]          # format all files, or one language
-uv run latex-compile path.tex  # compile with Tectonic
+uv run typst-compile path.typ  # compile a practical handout
 uv run lint [py|tex]         # lint all files, or one language
 uv run typecheck             # type-check Python files
-```
-That creates `.venv` and installs project dependencies (Python ≥ 3.12).
-
-## Weekly exercises
-
-| Folder | Contents |
-| ------ | -------- |
-| `prac/` | Practical scripts and write-ups (`week_01.py`, `week_01.tex`, …) |
-| `lec/` | Lecture code (`week_01.py`, …) |
-| `tuts/` | Tutorials (`W<number>/`) |
-| `assign/<number>/` | Assignment scripts, write-ups and assets |
-
-## Run codes
-
-Interactive menu (Lecture / Practical → week, or Assignment → number → task):
-
-```bash
-uv run code
-```
-
-Or run a file directly:
-
-```bash
-uv run python prac/week_01.py
-uv run python lec/week_01.py
-```
-
-### Other commands
-
-```bash
-uv run clean                 # remove gitignored build artefacts (keeps .venv)
-uv run latex-compile path.tex  # compile with MacTeX, strip aux files
 ```

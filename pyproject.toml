@@ -18,7 +18,7 @@ clean = "tools.script:clean"
 code = "tools.script:code"
 fmt = "tools.script:fmt"
 lint = "tools.script:lint"
-latex-compile = "tools.script:latex_compile"
+typst-compile = "tools.script:typst_compile"
 typecheck = "tools.script:typecheck"
 
 [dependency-groups]

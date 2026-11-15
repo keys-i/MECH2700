@@ -3,13 +3,13 @@ set -euo pipefail
 
 case "${1:-}" in
 compile)
-  mapfile -t files < <(find . -type f -name 'week_*.tex' ! -path './.git/*' | sed 's|^\./||' | sort)
+  mapfile -t files < <(find . -type f -name 'week_*.typ' ! -path './.git/*' | sed 's|^\./||' | sort)
   if ((${#files[@]} == 0)); then
-    echo "::error::No week_*.tex files found"
+    echo "::error::No week_*.typ files found"
     exit 1
   fi
   for file in "${files[@]}"; do
-    uv run latex-compile "$file"
+    uv run typst-compile "$file"
   done
   ;;
 package)
